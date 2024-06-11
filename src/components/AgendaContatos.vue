@@ -45,6 +45,7 @@ export default {
             contatos: [],
             currentPage: 1,
             itemsPerPage: 10,
+            totalRecords: 0,
         };
     },
     computed: {
@@ -63,12 +64,12 @@ export default {
     },
     methods: {
         fetchContatos() {
-            fetch('http://localhost/agenda/html/get-pessoas.php1')
+            fetch(import.meta.env.VITE_API_ADDR + 'get-pessoas.php')
                 .then(response => response.json())
                 .then(data => {
-                    this.contatos = data;
+                    this.contatos = data.data;
+                    this.totalRecords = data.totalRecords;
                 })
-            console.log(data)
                 .catch(error => {
                     console.error('Error fetching contatos:', error);
                 });
