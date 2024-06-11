@@ -1,6 +1,9 @@
 <template>
     <div class="container mx-auto px-4">
         <div class="relative overflow-x-auto">
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Lista de
+                contatos
+            </h2>
             <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -60,7 +63,7 @@ export default {
     },
     methods: {
         fetchContatos() {
-            fetch('http://localhost/agenda/html/get-pessoas.php')
+            fetch('http://localhost/agenda/html/get-pessoas.php1')
                 .then(response => response.json())
                 .then(data => {
                     this.contatos = data;

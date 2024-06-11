@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <Header class="pb-40" />
-        <h1 align="center">Contatos</h1>
         <AgendaContatos />
         <CadastroContatos />
     </div>
