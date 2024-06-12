@@ -1,9 +1,7 @@
 <template>
     <div class="container mx-auto px-4">
         <div class="relative overflow-x-auto">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Lista de
-                contatos
-            </h2>
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Lista de contatos</h2>
             <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -15,8 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="contato in paginatedContatos" :key="contato.id"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr v-for="contato in paginatedContatos" :key="contato.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ contato.nome }}
                         </th>
@@ -29,17 +26,32 @@
             </table>
         </div>
 
+        <!-- <nav aria-label="Page navigation example">
+            <Paginator :rows="10" :totalRecords="totalRecords" :rowsPerPageOptions="[10, 20, 30]" :first="(currentPage - 1) * itemsPerPage" @page="goToPage(currentPage)" ></Paginator>
+        </nav> -->
+
         <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1">&lt;</button>
-            <span>{{ currentPage }}</span>
-            <button @click="nextPage" :disabled="currentPage === totalPages">&gt;</button>
+            <button class="px-2" v-if="currentPage !== 1" @click="goToPage(1)">Primeira</button>
+            <button class="px-2" v-if="currentPage > 1" @click="goToPage(currentPage - 1)">&lt;</button>
+            <button class="px-2" v-for="index in totalPages" :key="index" @click="goToPage(index)">{{ index }}</button>
+            <button class="px-2" v-if="currentPage < totalPages" @click="goToPage(currentPage + 1)"> &gt;</button>
+            <button class="px-2" v-if="currentPage !== totalPages" @click="goToPage(totalPages)">{{totalPages}}</button>
         </div>
+
     </div>
 </template>
 
+
 <script>
+import Paginator from 'primevue/paginator';
+
+
 export default {
+
     name: 'AgendaContatos',
+    components: {
+        Paginator,
+    },
     data() {
         return {
             contatos: [],
@@ -50,43 +62,33 @@ export default {
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.contatos.length / this.itemsPerPage);
-        },
-        startIndex() {
-            return (this.currentPage - 1) * this.itemsPerPage;
-        },
-        endIndex() {
-            return this.currentPage * this.itemsPerPage;
+            return Math.ceil(this.totalRecords / this.itemsPerPage);
         },
         paginatedContatos() {
-            return this.contatos.slice(this.startIndex, this.endIndex);
+            return this.contatos;
         }
     },
     methods: {
-        fetchContatos() {
-            fetch(import.meta.env.VITE_API_ADDR + 'get-pessoas.php')
+        fetchContatos(page) {
+            fetch(`${import.meta.env.VITE_API_ADDR}/get-pessoas.php/?pagina=${page}&limit=10`)
                 .then(response => response.json())
                 .then(data => {
                     this.contatos = data.data;
                     this.totalRecords = data.totalRecords;
+                    this.currentPage = page;
                 })
                 .catch(error => {
                     console.error('Error fetching contatos:', error);
                 });
         },
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage--;
+        goToPage(page) {
+            if (page >= 1 && page <= this.totalPages) {
+                this.fetchContatos(page);
             }
         },
-        nextPage() {
-            if (this.currentPage < this.totalPages) {
-                this.currentPage++;
-            }
-        }
     },
     mounted() {
-        this.fetchContatos();
+        this.fetchContatos(this.currentPage);
     }
 };
 </script>
@@ -128,7 +130,8 @@ table td {
     margin-top: 20px;
 }
 
-.pagination button {
+.pagination a {
     padding: 5px 10px;
+    cursor: pointer;
 }
 </style>
