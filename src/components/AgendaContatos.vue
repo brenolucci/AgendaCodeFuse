@@ -1,11 +1,13 @@
 <script>
 import {ref} from 'vue';
 import Paginator from 'primevue/paginator';
+import BarraBusca from './BarraBusca.vue'
 
 export default {
     name: 'AgendaContatos',
     components: {
         Paginator,
+        BarraBusca,
     },
     data() {
         return {
@@ -44,14 +46,32 @@ export default {
     <div class="container mx-auto px-4">
         <div class="relative overflow-x-auto">
             <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Lista de contatos</h2>
-            <table class="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table class="table-auto w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Nome</th>
-                        <th scope="col" class="px-6 py-3">Email</th>
-                        <th scope="col" class="px-6 py-3">DDI</th>
-                        <th scope="col" class="px-6 py-3">DDD</th>
-                        <th scope="col" class="px-6 py-3">Telefone</th>
+                        
+                        <th scope="col" class="px-6 py-3">
+                            <BarraBusca label="Nome"/>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <BarraBusca label="Email"/>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <BarraBusca label="DDI"/>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <BarraBusca label="DDD"/>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <BarraBusca label="Telefone"/>
+                        </th>
+                        <th class="d-flex">
+                            <button type="search"
+                            class="justify-center px-1 py-1 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            Filtrar
+                            </button>
+                
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
