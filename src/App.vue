@@ -1,11 +1,3 @@
-<template>
-    <div id="app">
-        <Header class="pb-40" />
-        <AgendaContatos />
-        <CadastroContatos />
-    </div>
-</template>
-
 <script>
 import AgendaContatos from './components/AgendaContatos.vue';
 import Header from './components/Header.vue';
@@ -20,3 +12,13 @@ export default {
     }
 };
 </script>
+
+
+<template>
+    <div id="app">
+        <Header class="pb-40" />
+        <AgendaContatos />
+        <CadastroContatos />
+    </div>
+</template>
+

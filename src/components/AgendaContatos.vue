@@ -1,3 +1,45 @@
+<script>
+import {ref} from 'vue';
+import Paginator from 'primevue/paginator';
+
+export default {
+    name: 'AgendaContatos',
+    components: {
+        Paginator,
+    },
+    data() {
+        return {
+            contatos: [],
+            currentPage: 1,
+            itemsPerPage: 10,
+            totalRecords: 0,
+        };
+    },
+    methods: {
+        fetchContatos() {
+            fetch(`${import.meta.env.VITE_API_ADDR}/get-pessoas.php/?pagina=${this.currentPage}&limit=${this.itemsPerPage}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.contatos = data.data;
+                    this.totalRecords = data.totalRecords;
+                })
+                .catch(error => {
+                    console.error('Error fetching contatos:', error);
+                });
+        },
+        paginateContatos(event) {
+            this.itemsPerPage = event.rows;
+            this.currentPage = event.page + 1;
+
+            this.fetchContatos();
+        },
+    },
+    mounted() {
+        this.fetchContatos();
+    }
+};
+</script>
+
 <template>
     <div class="container mx-auto px-4">
         <div class="relative overflow-x-auto">
@@ -13,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="contato in paginatedContatos" :key="contato.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr v-for="contato in contatos" :key="contato.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ contato.nome }}
                         </th>
@@ -26,72 +68,15 @@
             </table>
         </div>
 
-        <!-- <nav aria-label="Page navigation example">
-            <Paginator :rows="10" :totalRecords="totalRecords" :rowsPerPageOptions="[10, 20, 30]" :first="(currentPage - 1) * itemsPerPage" @page="goToPage(currentPage)" ></Paginator>
-        </nav> -->
-
-        <div class="pagination">
-            <button class="px-2" v-if="currentPage !== 1" @click="goToPage(1)">Primeira</button>
-            <button class="px-2" v-if="currentPage > 1" @click="goToPage(currentPage - 1)">&lt;</button>
-            <button class="px-2" v-for="index in totalPages" :key="index" @click="goToPage(index)">{{ index }}</button>
-            <button class="px-2" v-if="currentPage < totalPages" @click="goToPage(currentPage + 1)"> &gt;</button>
-            <button class="px-2" v-if="currentPage !== totalPages" @click="goToPage(totalPages)">{{totalPages}}</button>
-        </div>
-
+        <Paginator
+            :rows="itemsPerPage"
+            :totalRecords="totalRecords"
+            :first="(currentPage - 1) * itemsPerPage"
+            :rowsPerPageOptions="[1, 2, 5, 10, 20, 30]"
+            @page="paginateContatos"
+        />
     </div>
 </template>
-
-
-<script>
-import Paginator from 'primevue/paginator';
-
-
-export default {
-
-    name: 'AgendaContatos',
-    components: {
-        Paginator,
-    },
-    data() {
-        return {
-            contatos: [],
-            currentPage: 1,
-            itemsPerPage: 10,
-            totalRecords: 0,
-        };
-    },
-    computed: {
-        totalPages() {
-            return Math.ceil(this.totalRecords / this.itemsPerPage);
-        },
-        paginatedContatos() {
-            return this.contatos;
-        }
-    },
-    methods: {
-        fetchContatos(page) {
-            fetch(`${import.meta.env.VITE_API_ADDR}/get-pessoas.php/?pagina=${page}&limit=10`)
-                .then(response => response.json())
-                .then(data => {
-                    this.contatos = data.data;
-                    this.totalRecords = data.totalRecords;
-                    this.currentPage = page;
-                })
-                .catch(error => {
-                    console.error('Error fetching contatos:', error);
-                });
-        },
-        goToPage(page) {
-            if (page >= 1 && page <= this.totalPages) {
-                this.fetchContatos(page);
-            }
-        },
-    },
-    mounted() {
-        this.fetchContatos(this.currentPage);
-    }
-};
-</script>
 
 <style scoped>
 .agenda {
