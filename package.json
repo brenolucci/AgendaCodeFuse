@@ -14,9 +14,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-vue": "^2.0.0",
+    "@jamescoyle/vue-icon": "^0.1.2",
+    "@mdi/js": "^7.4.47",
     "pinia": "^2.1.7",
     "primevue": "^3.52.0",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

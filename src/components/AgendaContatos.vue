@@ -1,13 +1,33 @@
 <script>
-import {ref} from 'vue';
+import { ref, provide } from 'vue';
 import Paginator from 'primevue/paginator';
-import BarraBusca from './BarraBusca.vue'
+import BarraBusca from './BarraBusca.vue';
+import { CIcon } from '@coreui/icons-vue';
+import * as icon from '@coreui/icons';
 
 export default {
     name: 'AgendaContatos',
     components: {
         Paginator,
         BarraBusca,
+        CIcon,
+
+    },
+    setup() {
+        const busca = ref({
+            Nome: '',
+            Email: '',
+            DDI: '',
+            DDD: '',
+            Telefone: ''
+        });
+
+        provide('busca', busca);
+
+        return {
+            busca,
+            icon,
+        };
     },
     data() {
         return {
@@ -29,12 +49,32 @@ export default {
                     console.error('Error fetching contatos:', error);
                 });
         },
+        fetchFilter(searchString) {
+            fetch(`${import.meta.env.VITE_API_ADDR}/get-pessoas.php/?pagina=${this.currentPage}&limit=${this.itemsPerPage}${searchString}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.contatos = data.data;
+                    this.totalRecords = data.totalRecords;
+                })
+                .catch(error => {
+                    console.error('Error fetching contatos:', error);
+                });
+        },
         paginateContatos(event) {
             this.itemsPerPage = event.rows;
             this.currentPage = event.page + 1;
 
             this.fetchContatos();
         },
+        buscarContato() {
+            const queryParams = Object.keys(this.busca)
+                .filter(key => this.busca[key])
+                .map(key => `${key.toLowerCase()}=${encodeURIComponent(this.busca[key])}`)
+                .join('&');
+            const searchString =`&${queryParams}`
+            console.log(searchString)
+            this.fetchFilter(searchString);
+        }
     },
     mounted() {
         this.fetchContatos();
@@ -49,28 +89,27 @@ export default {
             <table class="table-auto w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        
                         <th scope="col" class="px-6 py-3">
-                            <BarraBusca label="Nome"/>
+                            <BarraBusca label="Nome" />
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            <BarraBusca label="Email"/>
+                            <BarraBusca label="Email" />
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            <BarraBusca label="DDI"/>
+                            <BarraBusca label="DDI" />
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            <BarraBusca label="DDD"/>
+                            <BarraBusca label="DDD" />
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            <BarraBusca label="Telefone"/>
+                            <BarraBusca label="Telefone" />
                         </th>
                         <th class="d-flex">
                             <button type="search"
-                            class="justify-center px-1 py-1 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Filtrar
+                                class="justify-center px-1 py-1 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                                @click="buscarContato">
+                                Filtrar
                             </button>
-                
                         </th>
                     </tr>
                 </thead>
@@ -83,6 +122,7 @@ export default {
                         <td class="px-6 py-4">{{ contato.ddi }}</td>
                         <td class="px-6 py-4">{{ contato.ddd }}</td>
                         <td class="px-6 py-4">{{ contato.telefone }}</td>
+                        <CIcon class="center" :icon="icon.cilDelete" size="sm"/>
                     </tr>
                 </tbody>
             </table>
