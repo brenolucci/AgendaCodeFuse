@@ -21,7 +21,7 @@
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(contato)
     };
-    fetch('http://localhost/agenda/html/criar.php', requestOptions)
+    fetch(`${import.meta.env.VITE_API_ADDR}/criar.php`, requestOptions)
       .then(response => response.json())
       .then(data => {
         if (data.error) {

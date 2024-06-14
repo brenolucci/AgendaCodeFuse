@@ -83,6 +83,10 @@ export default {
             const searchString =`&${queryParams}`
             console.log(searchString)
             this.fetchFilter(searchString);
+        },
+        deletarContato(id) {
+            fetch(`${import.meta.env.VITE_API_ADDR}/deletar.php?id=${id}`, { method: 'DELETE'})
+            .then(() => this.status = 'Contato deletado com sucesso!')
         }
     },
     mounted() {
