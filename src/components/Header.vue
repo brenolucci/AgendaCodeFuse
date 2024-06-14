@@ -11,9 +11,9 @@ export default {
     <nav class="bg-white border-gray-200 dark:bg-gray-900 px-1 pb-2">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <!--Logo da codefuse-->
-            <a href="https://codefuse.com.br/" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="../assets/codefuse-logo.svg" class="h-16" alt="Flowbite Logo" />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Agenda</span>
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
             </a>
             <div class="flex md:order-2">
                 <!--Botão de lupa modo mobile-->

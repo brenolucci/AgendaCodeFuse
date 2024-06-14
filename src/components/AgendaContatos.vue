@@ -3,7 +3,7 @@ import { ref, provide } from 'vue';
 import Paginator from 'primevue/paginator';
 import BarraBusca from './BarraBusca.vue';
 import { CIcon } from '@coreui/icons-vue';
-import * as icon from '@coreui/icons';
+import { cilDelete, cilPencil } from '@coreui/icons'
 
 export default {
     name: 'AgendaContatos',
@@ -26,7 +26,8 @@ export default {
 
         return {
             busca,
-            icon,
+            cilDelete,
+            cilPencil,
         };
     },
     data() {
@@ -60,12 +61,20 @@ export default {
                     console.error('Error fetching contatos:', error);
                 });
         },
+
         paginateContatos(event) {
             this.itemsPerPage = event.rows;
             this.currentPage = event.page + 1;
 
             this.fetchContatos();
         },
+        /**
+         * Cria uma queryString concatenando os campos de buscas que não são vazios e a inclui no GET chamando o fetchFilter() 
+         * @param {obj} busca
+         * @return 
+         */
+
+         /** */
         buscarContato() {
             const queryParams = Object.keys(this.busca)
                 .filter(key => this.busca[key])
@@ -118,11 +127,16 @@ export default {
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ contato.nome }}
                         </th>
-                        <td class="px-6 py-4">{{ contato.email }}</td>
-                        <td class="px-6 py-4">{{ contato.ddi }}</td>
-                        <td class="px-6 py-4">{{ contato.ddd }}</td>
-                        <td class="px-6 py-4">{{ contato.telefone }}</td>
-                        <CIcon class="center" :icon="icon.cilDelete" size="sm"/>
+                            <td class="px-6 py-4">{{ contato.email }}</td>
+                            <td class="px-6 py-4">{{ contato.ddi }}</td>
+                            <td class="px-6 py-4">{{ contato.ddd }}</td>
+                            <td class="px-6 py-4">{{ contato.telefone }}
+
+                        </td>
+                        <div class=" align-middle flex px-1 py-1">
+                            <CIcon class="px-2 py-2" :icon="cilPencil" size="sm"/>
+                            <CIcon class="px-2 py-2" :icon="cilDelete" size="sm"/>
+                        </div>
                     </tr>
                 </tbody>
             </table>

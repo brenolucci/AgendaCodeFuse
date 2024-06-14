@@ -1,35 +1,25 @@
-<script>
-import AgendaContatos from './components/AgendaContatos.vue';
-import Header from './components/Header.vue';
-import CadastroContatos from './components/CadastroContatos.vue'
-import { createMemoryHistory, createRouter } from 'vue-router'
-
-const routes = [
-  { path: '/', component: AgendaContatos },
-  { path: '/cadastro', component: CadastroContatos },
-]
-
-const router = createRouter({
-  history: createMemoryHistory(),
-  routes,
-})
-
-export default {
+  <script>
+  import AgendaContatos from './components/AgendaContatos.vue';
+  import Header from './components/Header.vue';
+  import CadastroContatos from './components/CadastroContatos.vue';
+  import { RouterLink, RouterView } from 'vue-router';
+  
+  export default {
     name: 'App',
     components: {
-        Header,
-        AgendaContatos,
-        CadastroContatos,
+      Header,
+      AgendaContatos,
+      CadastroContatos,
     }
-};
-</script>
+  };
+  </script>
 
 
 <template>
     <div id="app">
-        <Header class="pb-40"/>
-        <AgendaContatos />
-        <CadastroContatos />
+      <Header class="pb-20"/>
+      <RouterView />
     </div>
-</template>
-
+  </template>
+  
+  
