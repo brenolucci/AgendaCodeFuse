@@ -2,7 +2,6 @@
 import ContatoForm from '@/components/ContatoForm.vue';
 
 function criarContato(contato) {
-  console.log(contato)
 
   const requestOptions = {
     method: "POST",
@@ -15,6 +14,7 @@ function criarContato(contato) {
       if (data.error) {
         alert(data.message);
       } else {
+        location.reload()
         alert("Contato criado com sucesso!");
       }
     })
