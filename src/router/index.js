@@ -1,19 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AgendaContatos from '../components/AgendaContatos.vue'
-import CadastroContatos from '../components/CadastroContatos.vue'
+import HeaderLayout from '@/layouts/HeaderLayout.vue'
+import AgendaContatosPage from '@/pages/AgendaContatosPage.vue'
+import CadastroContatosPage from '@/pages/CadastroContatosPage.vue'
+import LoginPage from '@/pages/LoginPage.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      name: 'HeaderLayout',
       path: '/',
-      name: 'home',
-      component: AgendaContatos
+      component: HeaderLayout,
+      children: [
+        {
+          name: 'Home',
+          path: '/',
+          component: AgendaContatosPage
+        },
+        {
+          path: '/cadastro',
+          name: 'register',
+          component: CadastroContatosPage
+        }
+      ]
     },
     {
-      path: '/cadastro',
-      name: 'register',
-      component: CadastroContatos
+      name: 'login',
+      path: '/login',
+      component: LoginPage
     }
   ]
 })
