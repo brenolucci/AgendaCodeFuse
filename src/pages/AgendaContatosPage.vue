@@ -69,8 +69,9 @@ function abrirDeleteModal(id) {
 }
 
 function deletarContato() {
+    console.log(contatoId.value)
     fetch(`/api/deletar.php?id=${contatoId.value}`, { method: 'DELETE'})
-    .then(() => status = 'Contato deletado com sucesso!')
+    .then(() => status = alert('Contato deletado com sucesso!'))
     deletar.value = false
     fetchContatos()
 }
@@ -94,16 +95,16 @@ const requestOptions = {
     method: 'PUT',
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(contato)
-
     }
-  
     fetch(`/api/editar.php`, requestOptions)
     .then(response => response.json())
     .then(data => {
       if (data.error) {
-        alert(data.message);
-      } else {
-        alert("Contato criado com sucesso!");
+          alert(data.message);
+          } else {
+        visible.value = false;
+        location.reload()
+        alert("Contato editado com sucesso!");
       }
     })
 }
@@ -181,7 +182,7 @@ onMounted(() => {
         <span class="text-surface-500 dark:text-surface-400 block mb-8">Tem certeza que deseja deletar esse contato?</span>
         <div class="flex justify-end gap-2">
         <Button type="button" label="Cancel" severity="secondary" @click="deletar = false"></Button>
-        <Button type="button" label="Deletar" @mandar="deletarContato"></Button>
+        <Button type="button" label="Deletar" @click="deletarContato"></Button>
         </div>
     </Dialog>
 </template>
