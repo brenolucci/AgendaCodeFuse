@@ -14,11 +14,17 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@coreui/coreui": "^5.0.2",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-vue": "^2.0.0",
+    "@coreui/vue": "^5.1.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
+    "i": "^0.3.7",
+    "npm": "^10.8.1",
     "pinia": "^2.1.7",
+    "primeicons": "^7.0.0",
     "primevue": "^3.52.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.3"
