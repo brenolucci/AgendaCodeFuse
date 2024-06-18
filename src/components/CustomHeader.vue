@@ -7,7 +7,7 @@ import Button from 'primevue/button'
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <!--Logo da codefuse-->
             <router-link to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="../assets/codefuse-logo.svg" class="h-16" alt="Flowbite Logo" />
+                <img src="../assets/codefuse-logo.svg" class="h-18 w-28" alt="Flowbite Logo" />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
             </router-link>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">

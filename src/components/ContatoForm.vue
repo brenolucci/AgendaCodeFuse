@@ -2,6 +2,7 @@
 import { reactive, toRaw } from 'vue'
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
+import InputNumber from 'primevue/inputnumber';
 
 interface Contato {
   nome: string,
@@ -36,13 +37,6 @@ if (props.contatoData) {
     contatoForm.telefone = props.contatoData.telefone
 }
 
-function numberValidation(){
-    if (contatoForm.ddi.toString().length > 3) {
-        
-    }
-
-}
-
 
 </script>
 
@@ -59,15 +53,15 @@ function numberValidation(){
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <label for="DDI" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">DDI</label>
-        <InputText v-model="contatoForm.ddi" type="number" id="DDI" class="w-full" placeholder="55" required />
+        <InputText v-model.number="contatoForm.ddi" type="tel" id="DDI" class="w-full" placeholder="55" maxlength="4" required />
       </div>
       <div>
         <label for="DDD" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">DDD</label>
-        <InputText v-model="contatoForm.ddd" type="number" id="DDD" class="w-full" placeholder="61"  required />
+        <InputText v-model.number="contatoForm.ddd" type="tel" id="DDD" class="w-full" placeholder="61" maxlength="4"  required />
       </div>
       <div>
         <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telefone</label>
-        <InputText v-model="contatoForm.telefone" type="text" id="phone" class="w-full" placeholder="99999989" required />
+        <InputText v-model="contatoForm.telefone" type="text" id="phone" class="w-full" placeholder="99999989" maxlength="11" required />
       </div>
     </div>
     <Button type="submit" required>{{ props.labelBotao }}</Button>
