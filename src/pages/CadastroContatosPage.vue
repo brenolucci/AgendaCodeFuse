@@ -1,5 +1,15 @@
 <script setup>
 import ContatoForm from '@/components/ContatoForm.vue';
+import { nextTick, ref } from 'vue';
+
+
+const renderComponent = ref(true);
+
+async function forceRerender() {
+    renderComponent.value = false;
+    await nextTick();
+    renderComponent.value = true;
+}
 
 function criarContato(contato) {
 
@@ -14,7 +24,7 @@ function criarContato(contato) {
       if (data.error) {
         alert(data.message);
       } else {
-        location.reload()
+        forceRerender();
         alert("Contato criado com sucesso!");
       }
     })
@@ -33,7 +43,7 @@ function criarContato(contato) {
       <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
         Cadastrar novo contato
       </h2>
-      <ContatoForm labelBotao="Cadastrar" @mandar="criarContato" />
+      <ContatoForm v-if="renderComponent" labelBotao="Cadastrar" @mandar="criarContato" />
     </div>
   </section>
 </template>

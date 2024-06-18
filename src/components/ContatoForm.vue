@@ -6,8 +6,8 @@ import Button from 'primevue/button';
 interface Contato {
   nome: string,
   email: string,
-  ddi: number | null,
-  ddd: number | null,
+  ddi: number,
+  ddd: number,
   telefone: string
 }
 type Props = { labelBotao?: string; contatoData?: Contato };
@@ -23,8 +23,8 @@ const events = defineEmits([
 const contatoForm = reactive<Contato>({
   nome: '',
   email: '',
-  ddi: null,
-  ddd: null,
+  ddi: 0,
+  ddd: 0,
   telefone: ''
 });
 
@@ -35,6 +35,15 @@ if (props.contatoData) {
     contatoForm.ddd = props.contatoData.ddd
     contatoForm.telefone = props.contatoData.telefone
 }
+
+function numberValidation(){
+    if (contatoForm.ddi.toString().length > 3) {
+        
+    }
+
+}
+
+
 </script>
 
 <template>
@@ -50,11 +59,11 @@ if (props.contatoData) {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
         <label for="DDI" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">DDI</label>
-        <InputText v-model="contatoForm.ddi" type="text" id="DDI" class="w-full" placeholder="55" required />
+        <InputText v-model="contatoForm.ddi" type="number" id="DDI" class="w-full" placeholder="55" required />
       </div>
       <div>
         <label for="DDD" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">DDD</label>
-        <InputText v-model="contatoForm.ddd" type="text" id="DDD" class="w-full" placeholder="61" required />
+        <InputText v-model="contatoForm.ddd" type="number" id="DDD" class="w-full" placeholder="61"  required />
       </div>
       <div>
         <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Telefone</label>

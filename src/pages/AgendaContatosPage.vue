@@ -18,25 +18,13 @@ const visible = ref(false)
 const contatoEditavel = ref({})
 const deletar = ref(false)
 const contatoId =ref()
-
+const filtros = ref('');
 
 
 provide('busca', busca);
 
 function fetchContatos() {
-    fetch(`/api/get-pessoas.php/?pagina=${currentPage.value}&limit=${itemsPerPage.value}`)
-        .then(response => response.json())
-        .then(data => {
-            contatos.value = data.data;
-            totalRecords.value = data.totalRecords;
-        })
-        .catch(error => {
-            console.error('Error fetching contatos:', error);
-        });
-}
-
-function fetchFilter(searchString) {
-    fetch(`/api/get-pessoas.php/?pagina=${currentPage.value}&limit=${itemsPerPage.value}${searchString}`)
+    fetch(`/api/get-pessoas.php/?pagina=${currentPage.value}&limit=${itemsPerPage.value}${filtros.value}`)
         .then(response => response.json())
         .then(data => {
             contatos.value = data.data;
@@ -54,13 +42,14 @@ function paginateContatos(event) {
     fetchContatos();
 }
 
-function buscarContato() {
+function aplicarFiltro() {
     const queryParams = Object.keys(toRaw(busca.value))
         .filter((key) => busca.value[key])
-        .map(key => `${key.toLowerCase()}=${encodeURIComponent(busca.value[key])}`)
-        .join('&');
-    const searchString =`&${queryParams}`
-    fetchFilter(searchString);
+        .map(key => `${key.toLowerCase()}=${encodeURIComponent(busca.value[key])}`);
+    
+    filtros.value = (queryParams.length) ? '&'+queryParams.join('&') : '';
+
+    fetchContatos();
 }
 
 function abrirDeleteModal(id) {
@@ -69,11 +58,13 @@ function abrirDeleteModal(id) {
 }
 
 function deletarContato() {
-    console.log(contatoId.value)
     fetch(`/api/deletar.php?id=${contatoId.value}`, { method: 'DELETE'})
-    .then(() => status = alert('Contato deletado com sucesso!'))
+        .then(() => {
+            document.getElementById(`tr-contato-${contatoId.value}`).remove();
+            alert('Contato deletado com sucesso!');
+        });
+
     deletar.value = false
-    fetchContatos()
 }
 
 function abrirEditModal(contato) {
@@ -81,32 +72,33 @@ function abrirEditModal(contato) {
     visible.value = true
 }
 
-
 async function editarContato(contato) {
-contato = {
-    id: toRaw(contatoEditavel.value.id),
-    nome: contato.nome,
-    email: contato.email,
-    ddi: contato.ddi,
-    ddd: contato.ddd,
-    telefone: contato.telefone
-    }
-const requestOptions = {
-    method: 'PUT',
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(contato)
-    }
+    contato = {
+        id: toRaw(contatoEditavel.value.id),
+        nome: contato.nome,
+        email: contato.email,
+        ddi: contato.ddi,
+        ddd: contato.ddd,
+        telefone: contato.telefone
+    };
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(contato)
+    };
+
     fetch(`/api/editar.php`, requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-          alert(data.message);
-          } else {
-        visible.value = false;
-        location.reload()
-        alert("Contato editado com sucesso!");
-      }
-    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.message);
+            } else {
+                visible.value = false;
+                fetchContatos();
+                alert("Contato editado com sucesso!");
+            }
+    });
 }
 
 
@@ -138,12 +130,12 @@ onMounted(() => {
                             <BarraBusca label="Telefone" />
                         </th>
                         <th scope="col" class="pl-6">
-                            <Button type="search" class="pl-6" @click="buscarContato">Filtrar</Button>
+                            <Button type="search" class="pl-6" @click="aplicarFiltro">Filtrar</Button>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="contato in contatos" :key="contato.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr v-for="contato in contatos" :key="contato.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" :id="`tr-contato-${contato.id}`">
                         <th scope="row" class="text-left px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ contato.nome }}
                         </th>
